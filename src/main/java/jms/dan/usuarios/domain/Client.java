@@ -11,6 +11,7 @@ public class Client {
     private Boolean onlineEnabled;
     private User user;
     private List<Construction> constructions;
+
     public Integer getId() {
         return id;
     }
