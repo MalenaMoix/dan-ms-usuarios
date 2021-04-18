@@ -8,9 +8,10 @@ import jms.dan.usuarios.dto.EmployeeMapper;
 import jms.dan.usuarios.repository.RepoEmployeeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -50,16 +51,39 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO) {
+        // TODO duplicated code, make a function
+        Employee newEmployee = new Employee();
+        newEmployee.setMail(employeeDTO.getMail());
+
+        // TODO update User
+        User user = new User();
+        user.setUser(employeeDTO.getUser().getUser());
+        user.setPassword(employeeDTO.getUser().getPassword());
+
+        UserType userType = new UserType();
+        userType.setId(2);
+        userType.setType("EMPLOYEE");
+
+        user.setUserType(userType);
+        newEmployee.setUser(user);
+        Employee employeeUpdated = repoEmployee.updateEmployee(id, newEmployee);
+        if (employeeUpdated != null) {
+            return EmployeeMapper.toEmployeeDTO(employeeUpdated);
+        }
         return null;
     }
 
     @Override
-    public EmployeeDTO deleteEmployee(Integer id) {
-        return null;
+    public Boolean deleteEmployee(Integer id) {
+        return repoEmployee.deleteEmployee((id));
     }
 
     @Override
     public EmployeeDTO getEmployeeById(Integer id) {
+        Employee employee = repoEmployee.getEmployeeById(id);
+        if (employee != null) {
+            return EmployeeMapper.toEmployeeDTO(employee);
+        }
         return null;
     }
 }

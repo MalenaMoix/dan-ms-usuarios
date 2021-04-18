@@ -6,10 +6,11 @@ import java.util.List;
 public interface EmployeeService {
     EmployeeDTO createEmployee(EmployeeDTO employeeDTO);
     EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO);
-    EmployeeDTO deleteEmployee(Integer id);
+    Boolean deleteEmployee(Integer id);
     EmployeeDTO getEmployeeById(Integer id);
 
     List<EmployeeDTO> getAllEmployees();
 
-    // TODO getEmployee by Client y/o constructionType
+    // TODO getEmployee by name optional query string
+    // Decide how to implement that
 }

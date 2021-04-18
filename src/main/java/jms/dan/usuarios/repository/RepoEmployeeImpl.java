@@ -1,9 +1,12 @@
 package jms.dan.usuarios.repository;
 
 import jms.dan.usuarios.domain.Employee;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 @Repository
 public class RepoEmployeeImpl implements RepoEmployee {
@@ -19,12 +22,38 @@ public class RepoEmployeeImpl implements RepoEmployee {
 
     @Override
     public Employee updateEmployee(Integer id, Employee newEmployee) {
-        // TODO
-        return newEmployee;
+        OptionalInt indexOpt = IntStream.range(0, employeesList.size())
+                .filter(i -> employeesList.get(i).getId().equals(id))
+                .findFirst();
+        if (indexOpt.isPresent()){
+            employeesList.set(indexOpt.getAsInt(), newEmployee);
+            return newEmployee;
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<Employee> getAllEmployees() {
         return employeesList;
+    }
+
+    @Override
+    public Boolean deleteEmployee(Integer id) {
+        OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getId().equals(id)).findFirst();
+        if (indexOpt.isPresent()) {
+            employeesList.remove(indexOpt.getAsInt());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Employee getEmployeeById(Integer id) {
+        OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getId().equals(id)).findFirst();
+        if (indexOpt.isPresent()) {
+            return employeesList.get(indexOpt.getAsInt());
+        }
+        return null;
     }
 }

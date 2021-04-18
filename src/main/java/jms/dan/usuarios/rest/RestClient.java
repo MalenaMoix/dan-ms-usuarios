@@ -69,11 +69,9 @@ public class RestClient {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Client> deleteClient(@PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, clientsList.size())
-                .filter(i -> clientsList.get(i).getId().equals(id))
-                .findFirst();
+        OptionalInt indexOpt = IntStream.range(0, clientsList.size()).filter(i -> clientsList.get(i).getId().equals(id)).findFirst();
 
-        if(indexOpt.isPresent()){
+        if (indexOpt.isPresent()) {
             clientsList.remove(indexOpt.getAsInt());
             return ResponseEntity.ok().build();
         } else {
