@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RepoClientImpl implements RepoClient {
+public class RepositoryClient implements IRepositoryClient {
     @Override
     public Client createClient(Client newClient) {
         return null;

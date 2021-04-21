@@ -10,6 +10,7 @@ public class EmployeeMapper {
         employeeDTO.setId(employee.getId());
         employeeDTO.setMail(employee.getMail());
         employeeDTO.setUser(employee.getUser());
+        employeeDTO.setUserTypeId(employee.getUser().getUserType().getId());
         return employeeDTO;
     }
 }

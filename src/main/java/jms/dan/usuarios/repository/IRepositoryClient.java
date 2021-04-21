@@ -4,7 +4,7 @@ import jms.dan.usuarios.domain.Client;
 
 import java.util.List;
 
-public interface RepoClient {
+public interface IRepositoryClient {
     Client createClient(Client newClient);
 
     Client updateClient(Client newClient, Integer id);

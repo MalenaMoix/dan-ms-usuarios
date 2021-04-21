@@ -1,4 +1,4 @@
 package jms.dan.usuarios.repository;
 
-public class RepoConstructionImpl {
+public class RepositoryConstruction {
 }

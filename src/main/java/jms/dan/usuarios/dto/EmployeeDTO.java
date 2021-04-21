@@ -5,7 +5,16 @@ import jms.dan.usuarios.domain.User;
 public class EmployeeDTO {
     private Integer id;
     private String mail;
+    private Integer userTypeId;
     private User user;
+
+    public Integer getUserTypeId() {
+        return userTypeId;
+    }
+
+    public void setUserTypeId(Integer userTypeId) {
+        this.userTypeId = userTypeId;
+    }
 
     public User getUser() {
         return user;

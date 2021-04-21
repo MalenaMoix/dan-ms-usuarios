@@ -1,7 +1,6 @@
 package jms.dan.usuarios.repository;
 
 import jms.dan.usuarios.domain.Employee;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 @Repository
-public class RepoEmployeeImpl implements RepoEmployee {
+public class RepositoryEmployee implements IRepositoryEmployee {
     private static final List<Employee> employeesList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
@@ -36,6 +35,12 @@ public class RepoEmployeeImpl implements RepoEmployee {
     @Override
     public List<Employee> getAllEmployees() {
         return employeesList;
+    }
+
+    @Override
+    public List<Employee> getEmployeesByName(String name) {
+        // TODO implement
+        return null;
     }
 
     @Override

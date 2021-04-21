@@ -1,7 +1,7 @@
 package jms.dan.usuarios.rest;
 
 import jms.dan.usuarios.dto.EmployeeDTO;
-import jms.dan.usuarios.service.EmployeeService;
+import jms.dan.usuarios.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +11,16 @@ import java.util.List;
 @RequestMapping("/api/employees")
 public class RestEmployee {
     @Autowired
-    private EmployeeService employeeService;
+    private IEmployeeService IEmployeeService;
 
     @PostMapping
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO newEmployee) {
-        return ResponseEntity.ok(employeeService.createEmployee(newEmployee));
+        return ResponseEntity.ok(IEmployeeService.createEmployee(newEmployee));
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO newEmployee, @PathVariable Integer id) {
-        EmployeeDTO employeeUpdated = employeeService.updateEmployee(id, newEmployee);
+        EmployeeDTO employeeUpdated = IEmployeeService.updateEmployee(id, newEmployee);
         if (employeeUpdated != null) {
             return ResponseEntity.ok(employeeUpdated);
         }
@@ -28,13 +28,13 @@ public class RestEmployee {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required = false) String name) {
+        return ResponseEntity.ok(IEmployeeService.getEmployees(name));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer id) {
-        EmployeeDTO employee = employeeService.getEmployeeById(id);
+        EmployeeDTO employee = IEmployeeService.getEmployeeById(id);
         if (employee != null) {
             return ResponseEntity.ok(employee);
         }
@@ -43,7 +43,7 @@ public class RestEmployee {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<EmployeeDTO> deleteEmployee(@PathVariable Integer id) {
-        Boolean deleted = employeeService.deleteEmployee(id);
+        Boolean deleted = IEmployeeService.deleteEmployee(id);
         if (deleted) {
             return ResponseEntity.ok().build();
         }
