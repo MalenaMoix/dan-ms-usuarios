@@ -39,8 +39,13 @@ public class RepositoryEmployee implements IRepositoryEmployee {
 
     @Override
     public List<Employee> getEmployeesByName(String name) {
-        // TODO implement
-        return null;
+        List<Employee> employees = new ArrayList<>();
+        for (Employee employee : employeesList) {
+            if (employee.getUser().getUser().equals(name)) {
+                employees.add(employee);
+            }
+        }
+        return employees;
     }
 
     @Override
