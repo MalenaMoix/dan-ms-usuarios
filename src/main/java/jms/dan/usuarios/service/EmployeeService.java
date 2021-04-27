@@ -111,9 +111,9 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public Boolean deleteEmployee(Integer id) {
-        Boolean isDeleted = repoEmployee.deleteEmployee(id);
-        if (!isDeleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");;
-        return true;
+        Employee employee = repoEmployee.getEmployeeById(id);
+        if (employee == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
+        return repoEmployee.deleteEmployee(id);
     }
 
     @Override
