@@ -7,7 +7,10 @@ import jms.dan.usuarios.dto.EmployeeDTO;
 import jms.dan.usuarios.dto.EmployeeMapper;
 import jms.dan.usuarios.repository.RepositoryEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +36,34 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+    public void createEmployee(EmployeeDTO employeeDTO) {
+        if (!isValidUserTypeId(employeeDTO.getUserTypeId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
+        }
+        EmployeeDTO employee = getEmployeeByEmail(employeeDTO.getMail());
+        if (employee != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An employee with this email already exists");
+        }
+
         Employee newEmployee = new Employee();
         newEmployee.setMail(employeeDTO.getMail());
 
         User user = createUser(employeeDTO);
         newEmployee.setUser(user);
 
-        return EmployeeMapper.toEmployeeDTO(repoEmployee.saveEmployee(newEmployee));
+        EmployeeMapper.toEmployeeDTO(repoEmployee.saveEmployee(newEmployee));
     }
 
     @Override
     public EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO) {
+        if (!isValidUserTypeId(employeeDTO.getUserTypeId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
+        }
+        EmployeeDTO employee = getEmployeeByEmail(employeeDTO.getMail());
+        if (employee != null && !employee.getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An employee with this email already exists");
+        }
+
         Employee newEmployee = new Employee();
         newEmployee.setId(id);
         newEmployee.setMail(employeeDTO.getMail());
@@ -53,10 +72,9 @@ public class EmployeeService implements IEmployeeService {
         newEmployee.setUser(user);
 
         Employee employeeUpdated = repoEmployee.updateEmployee(id, newEmployee);
-        if (employeeUpdated != null) {
-            return EmployeeMapper.toEmployeeDTO(employeeUpdated);
-        }
-        return null;
+        if (employeeUpdated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
+
+        return EmployeeMapper.toEmployeeDTO(employeeUpdated);
     }
 
     // TODO implement User methods on its corresponding Repository
@@ -93,16 +111,16 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public Boolean deleteEmployee(Integer id) {
-        return repoEmployee.deleteEmployee((id));
+        Boolean isDeleted = repoEmployee.deleteEmployee(id);
+        if (!isDeleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");;
+        return true;
     }
 
     @Override
     public EmployeeDTO getEmployeeById(Integer id) {
         Employee employee = repoEmployee.getEmployeeById(id);
-        if (employee != null) {
-            return EmployeeMapper.toEmployeeDTO(employee);
-        }
-        return null;
+        if (employee == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
+        return EmployeeMapper.toEmployeeDTO(employee);
     }
 
     @Override

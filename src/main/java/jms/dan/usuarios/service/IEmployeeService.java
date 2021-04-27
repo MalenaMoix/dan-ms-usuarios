@@ -4,7 +4,7 @@ import jms.dan.usuarios.dto.EmployeeDTO;
 import java.util.List;
 
 public interface IEmployeeService {
-    EmployeeDTO createEmployee(EmployeeDTO employeeDTO);
+    void createEmployee(EmployeeDTO employeeDTO);
     EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO);
     Boolean deleteEmployee(Integer id);
 
