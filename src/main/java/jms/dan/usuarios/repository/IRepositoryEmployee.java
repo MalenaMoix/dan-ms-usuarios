@@ -8,6 +8,7 @@ public interface IRepositoryEmployee {
     Employee updateEmployee(Integer id, Employee newEmployee);
     Boolean deleteEmployee(Integer id);
     Employee getEmployeeById(Integer id);
+    Employee getEmployeeByEmail(String email);
 
     List<Employee> getAllEmployees();
     List<Employee> getEmployeesByName(String name);

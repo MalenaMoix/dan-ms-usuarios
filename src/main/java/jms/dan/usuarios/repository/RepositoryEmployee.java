@@ -66,4 +66,13 @@ public class RepositoryEmployee implements IRepositoryEmployee {
         }
         return null;
     }
+
+    @Override
+    public Employee getEmployeeByEmail(String email) {
+        OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getMail().equals(email)).findFirst();
+        if (indexOpt.isPresent()) {
+            return employeesList.get(indexOpt.getAsInt());
+        }
+        return null;
+    }
 }

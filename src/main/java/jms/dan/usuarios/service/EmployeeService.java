@@ -11,16 +11,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 @Service
 public class EmployeeService implements IEmployeeService {
     @Autowired
     private RepositoryEmployee repoEmployee;
-    private List<UserType> userTypes;
+    private List<UserType> userTypes = new ArrayList<>();
 
     @PostConstruct
     private void init() {
-        userTypes = new ArrayList<>();
         UserType userType1 = new UserType();
         userType1.setId(1);
         userType1.setType("CLIENT");
@@ -33,35 +34,27 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
-        // TODO check if employee already exists with the email
-        // Create method to getEmployeeByEmail
-        if (employeeDTO.getUserTypeId().equals(2)) {
-            Employee newEmployee = new Employee();
-            newEmployee.setMail(employeeDTO.getMail());
+        Employee newEmployee = new Employee();
+        newEmployee.setMail(employeeDTO.getMail());
 
-            User user = createUser(employeeDTO);
-            newEmployee.setUser(user);
+        User user = createUser(employeeDTO);
+        newEmployee.setUser(user);
 
-            return EmployeeMapper.toEmployeeDTO(repoEmployee.saveEmployee(newEmployee));
-        }
-        return null;
+        return EmployeeMapper.toEmployeeDTO(repoEmployee.saveEmployee(newEmployee));
     }
 
     @Override
     public EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO) {
-        if (employeeDTO.getUserTypeId().equals(2)) {
-            Employee newEmployee = new Employee();
-            newEmployee.setId(id);
-            newEmployee.setMail(employeeDTO.getMail());
+        Employee newEmployee = new Employee();
+        newEmployee.setId(id);
+        newEmployee.setMail(employeeDTO.getMail());
 
-            User user = createUser(employeeDTO);
-            newEmployee.setUser(user);
+        User user = createUser(employeeDTO);
+        newEmployee.setUser(user);
 
-            Employee employeeUpdated = repoEmployee.updateEmployee(id, newEmployee);
-            if (employeeUpdated != null) {
-                return EmployeeMapper.toEmployeeDTO(employeeUpdated);
-            }
-            return null;
+        Employee employeeUpdated = repoEmployee.updateEmployee(id, newEmployee);
+        if (employeeUpdated != null) {
+            return EmployeeMapper.toEmployeeDTO(employeeUpdated);
         }
         return null;
     }
@@ -110,5 +103,20 @@ public class EmployeeService implements IEmployeeService {
             return EmployeeMapper.toEmployeeDTO(employee);
         }
         return null;
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeByEmail(String email) {
+        Employee employee = repoEmployee.getEmployeeByEmail(email);
+        if (employee != null) {
+            return EmployeeMapper.toEmployeeDTO(employee);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean isValidUserTypeId(Integer userTypeId) {
+        OptionalInt indexOpt = IntStream.range(0, userTypes.size()).filter(i -> userTypes.get(i).getId().equals(userTypeId)).findFirst();
+        return indexOpt.isPresent();
     }
 }
