@@ -1,4 +1,4 @@
-package jms.dan.usuarios.rest;
+package jms.dan.usuarios.controller;
 
 import jms.dan.usuarios.domain.Client;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/clients")
-public class RestClient {
+public class ClientController {
     private static final List<Client> clientsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 

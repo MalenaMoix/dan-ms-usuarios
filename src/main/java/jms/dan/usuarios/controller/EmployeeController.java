@@ -1,6 +1,6 @@
-package jms.dan.usuarios.rest;
+package jms.dan.usuarios.controller;
 
-import jms.dan.usuarios.dto.EmployeeDTO;
+import jms.dan.usuarios.domain.Employee;
 import jms.dan.usuarios.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,12 +11,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
-public class RestEmployee {
+public class EmployeeController {
     @Autowired
     private IEmployeeService IEmployeeService;
 
     @PostMapping
-    public ResponseEntity<String> createEmployee(@RequestBody EmployeeDTO newEmployee) {
+    public ResponseEntity<String> createEmployee(@RequestBody Employee newEmployee) {
         try {
             IEmployeeService.createEmployee(newEmployee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
@@ -26,9 +26,9 @@ public class RestEmployee {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateEmployee(@RequestBody EmployeeDTO newEmployee, @PathVariable Integer id) {
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee newEmployee, @PathVariable Integer id) {
         try {
-            EmployeeDTO employeeUpdated = IEmployeeService.updateEmployee(id, newEmployee);
+            Employee employeeUpdated = IEmployeeService.updateEmployee(id, newEmployee);
             return ResponseEntity.ok(employeeUpdated);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getReason());
@@ -36,14 +36,14 @@ public class RestEmployee {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestParam(required = false) String name) {
         return ResponseEntity.ok(IEmployeeService.getEmployees(name));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getEmployeeById(@PathVariable Integer id) {
         try {
-            EmployeeDTO employee = IEmployeeService.getEmployeeById(id);
+            Employee employee = IEmployeeService.getEmployeeById(id);
             return ResponseEntity.ok(employee);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getReason());

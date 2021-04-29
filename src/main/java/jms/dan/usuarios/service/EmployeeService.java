@@ -3,14 +3,11 @@ package jms.dan.usuarios.service;
 import jms.dan.usuarios.domain.Employee;
 import jms.dan.usuarios.domain.User;
 import jms.dan.usuarios.domain.UserType;
-import jms.dan.usuarios.dto.EmployeeDTO;
-import jms.dan.usuarios.dto.EmployeeMapper;
 import jms.dan.usuarios.repository.RepositoryEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,56 +33,56 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void createEmployee(EmployeeDTO employeeDTO) {
-        if (!isValidUserTypeId(employeeDTO.getUserTypeId())) {
+    public void createEmployee(Employee employeeToCreate) {
+        if (!isValidUserTypeId(employeeToCreate.getUser().getUserType().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
         }
-        EmployeeDTO employee = getEmployeeByEmail(employeeDTO.getMail());
+        Employee employee = getEmployeeByEmail(employeeToCreate.getMail());
         if (employee != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An employee with this email already exists");
         }
 
         Employee newEmployee = new Employee();
-        newEmployee.setMail(employeeDTO.getMail());
+        newEmployee.setMail(employeeToCreate.getMail());
 
-        User user = createUser(employeeDTO);
+        User user = createUser(employeeToCreate);
         newEmployee.setUser(user);
 
-        EmployeeMapper.toEmployeeDTO(repoEmployee.saveEmployee(newEmployee));
+        repoEmployee.saveEmployee(newEmployee);
     }
 
     @Override
-    public EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO) {
-        if (!isValidUserTypeId(employeeDTO.getUserTypeId())) {
+    public Employee updateEmployee(Integer id, Employee employeeToUpdate) {
+        if (!isValidUserTypeId(employeeToUpdate.getUser().getUserType().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
         }
-        EmployeeDTO employee = getEmployeeByEmail(employeeDTO.getMail());
+        Employee employee = getEmployeeByEmail(employeeToUpdate.getMail());
         if (employee != null && !employee.getId().equals(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An employee with this email already exists");
         }
 
         Employee newEmployee = new Employee();
         newEmployee.setId(id);
-        newEmployee.setMail(employeeDTO.getMail());
+        newEmployee.setMail(employeeToUpdate.getMail());
 
-        User user = createUser(employeeDTO);
+        User user = createUser(employeeToUpdate);
         newEmployee.setUser(user);
 
         Employee employeeUpdated = repoEmployee.updateEmployee(id, newEmployee);
         if (employeeUpdated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
 
-        return EmployeeMapper.toEmployeeDTO(employeeUpdated);
+        return employeeUpdated;
     }
 
     // TODO implement User methods on its corresponding Repository
     // for now I did it here so we can continue
-    private User createUser(EmployeeDTO employeeDTO) {
+    private User createUser(Employee employee) {
         User user = new User();
-        user.setUser(employeeDTO.getUser().getUser());
-        user.setPassword(employeeDTO.getUser().getPassword());
+        user.setUser(employee.getUser().getUser());
+        user.setPassword(employee.getUser().getPassword());
 
         UserType userType = new UserType();
-        userType.setId(employeeDTO.getUserTypeId());
+        userType.setId(employee.getUser().getUserType().getId());
         userType.setType("EMPLOYEE");
 
         user.setUserType(userType);
@@ -93,7 +90,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> getEmployees(String name) {
+    public List<Employee> getEmployees(String name) {
         List<Employee> employees;
         if (name != null) {
             employees = repoEmployee.getEmployeesByName(name);
@@ -101,35 +98,26 @@ public class EmployeeService implements IEmployeeService {
             employees = repoEmployee.getAllEmployees();
         }
 
-        List<EmployeeDTO> employeesMapped = new ArrayList<>();
-        for (Employee employee : employees) {
-            employeesMapped.add(EmployeeMapper.toEmployeeDTO(employee));
-        }
-
-        return employeesMapped;
+        return employees;
     }
 
     @Override
-    public Boolean deleteEmployee(Integer id) {
+    public void deleteEmployee(Integer id) {
         Employee employee = repoEmployee.getEmployeeById(id);
         if (employee == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
-        return repoEmployee.deleteEmployee(id);
+        repoEmployee.deleteEmployee(id);
     }
 
     @Override
-    public EmployeeDTO getEmployeeById(Integer id) {
+    public Employee getEmployeeById(Integer id) {
         Employee employee = repoEmployee.getEmployeeById(id);
         if (employee == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
-        return EmployeeMapper.toEmployeeDTO(employee);
+        return employee;
     }
 
     @Override
-    public EmployeeDTO getEmployeeByEmail(String email) {
-        Employee employee = repoEmployee.getEmployeeByEmail(email);
-        if (employee != null) {
-            return EmployeeMapper.toEmployeeDTO(employee);
-        }
-        return null;
+    public Employee getEmployeeByEmail(String email) {
+        return repoEmployee.getEmployeeByEmail(email);
     }
 
     @Override

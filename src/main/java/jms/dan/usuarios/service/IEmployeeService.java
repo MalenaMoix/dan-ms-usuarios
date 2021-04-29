@@ -1,16 +1,16 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.dto.EmployeeDTO;
+import jms.dan.usuarios.domain.Employee;
 import java.util.List;
 
 public interface IEmployeeService {
-    void createEmployee(EmployeeDTO employeeDTO);
-    EmployeeDTO updateEmployee(Integer id, EmployeeDTO employeeDTO);
-    Boolean deleteEmployee(Integer id);
+    void createEmployee(Employee newEmployee);
+    Employee updateEmployee(Integer id, Employee newEmployee);
+    void deleteEmployee(Integer id);
 
-    EmployeeDTO getEmployeeById(Integer id);
-    EmployeeDTO getEmployeeByEmail(String email);
-    List<EmployeeDTO> getEmployees(String name);
+    Employee getEmployeeById(Integer id);
+    Employee getEmployeeByEmail(String email);
+    List<Employee> getEmployees(String name);
 
     Boolean isValidUserTypeId(Integer userTypeId);
 }
