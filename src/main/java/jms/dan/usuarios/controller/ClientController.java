@@ -1,4 +1,4 @@
-package jms.dan.usuarios.rest;
+package jms.dan.usuarios.controller;
 
 import jms.dan.usuarios.domain.Client;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/clients")
-public class RestClient {
+public class ClientController {
     private static final List<Client> clientsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
@@ -69,11 +69,9 @@ public class RestClient {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Client> deleteClient(@PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, clientsList.size())
-                .filter(i -> clientsList.get(i).getId().equals(id))
-                .findFirst();
+        OptionalInt indexOpt = IntStream.range(0, clientsList.size()).filter(i -> clientsList.get(i).getId().equals(id)).findFirst();
 
-        if(indexOpt.isPresent()){
+        if (indexOpt.isPresent()) {
             clientsList.remove(indexOpt.getAsInt());
             return ResponseEntity.ok().build();
         } else {
