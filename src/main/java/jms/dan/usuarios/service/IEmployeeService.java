@@ -11,6 +11,4 @@ public interface IEmployeeService {
     Employee getEmployeeById(Integer id);
     Employee getEmployeeByEmail(String email);
     List<Employee> getEmployees(String name);
-
-    Boolean isValidUserTypeId(Integer userTypeId);
 }

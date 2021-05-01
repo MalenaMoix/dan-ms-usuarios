@@ -1,5 +1,6 @@
 package jms.dan.usuarios.domain;
 
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Client {
     private User user;
     @JsonIgnore
     private List<Construction> constructions;
+    private Date dischargeDate;
 
     public Client() {
     }
@@ -33,49 +35,72 @@ public class Client {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getBusinessName() {
         return businessName;
     }
+
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
+
     public String getCuit() {
         return cuit;
     }
+
     public void setCuit(String cuit) {
         this.cuit = cuit;
     }
+
     public String getMail() {
         return mail;
     }
+
     public void setMail(String mail) {
         this.mail = mail;
     }
+
     public Double getMaxCurrentAccount() {
         return maxCurrentAccount;
     }
+
     public void setMaxCurrentAccount(Double maxCurrentAccount) {
         this.maxCurrentAccount = maxCurrentAccount;
     }
+
     public Boolean getOnlineEnabled() {
         return onlineEnabled;
     }
+
     public void setOnlineEnabled(Boolean onlineEnabled) {
         this.onlineEnabled = onlineEnabled;
     }
+
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
+
     public List<Construction> getConstructions() {
         return constructions;
     }
+
     public void setConstructions(List<Construction> constructions) {
         this.constructions = constructions;
+    }
+
+    public Date getDischargeDate() {
+        return dischargeDate;
+    }
+
+    public void setDischargeDate(Date dischargeDate) {
+        this.dischargeDate = dischargeDate;
     }
 }

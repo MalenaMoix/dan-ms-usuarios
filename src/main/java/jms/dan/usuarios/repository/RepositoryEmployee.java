@@ -13,10 +13,9 @@ public class RepositoryEmployee implements IRepositoryEmployee {
     private static Integer ID_GEN = 1;
 
     @Override
-    public Employee saveEmployee(Employee newEmployee) {
+    public void saveEmployee(Employee newEmployee) {
         newEmployee.setId(ID_GEN++);
         employeesList.add(newEmployee);
-        return newEmployee;
     }
 
     @Override
@@ -49,13 +48,11 @@ public class RepositoryEmployee implements IRepositoryEmployee {
     }
 
     @Override
-    public Boolean deleteEmployee(Integer id) {
+    public void deleteEmployee(Integer id) {
         OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getId().equals(id)).findFirst();
         if (indexOpt.isPresent()) {
             employeesList.remove(indexOpt.getAsInt());
-            return true;
         }
-        return false;
     }
 
     @Override
