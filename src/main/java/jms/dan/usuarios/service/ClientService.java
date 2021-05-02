@@ -48,7 +48,7 @@ public class ClientService implements IClientService {
         if (!repositoryUser.isValidUserTypeId(clientToCreate.getUser().getUserType().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
         }
-        Client client = getClientByCuit(clientToCreate.getCuit());
+        Client client = repositoryClient.getClientByCuit(clientToCreate.getCuit());
         if (client != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this cuit already exists");
         }

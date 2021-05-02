@@ -52,13 +52,9 @@ public class RepositoryClient implements IRepositoryClient {
 
     @Override
     public Client getClientByCuit(String cuit) {
-        // TODO fix
         OptionalInt indexOpt = IntStream.range(0, clientsList.size()).filter(i -> clientsList.get(i).getCuit().equals(cuit)).findFirst();
-        if (indexOpt.isPresent()) {
-            if (clientsList.size() > 0) {
-                if (clientsList.get(indexOpt.getAsInt()).getDischargeDate() == null) return clientsList.get(indexOpt.getAsInt());
-                return null;
-            }
+        if (indexOpt.isPresent() && clientsList.get(indexOpt.getAsInt()).getDischargeDate() == null) {
+            return clientsList.get(indexOpt.getAsInt());
         }
         return null;
     }

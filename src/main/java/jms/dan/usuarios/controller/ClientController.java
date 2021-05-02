@@ -52,7 +52,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<String> createClient(@RequestBody Client newClient) {
-        if (newClient.getConstructions() == null) {
+        if (newClient.getConstructions() == null || newClient.getConstructions().size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You must specify at least one construction");
         }
         if (newClient.getUser() == null || newClient.getUser().getPassword() == null) {
