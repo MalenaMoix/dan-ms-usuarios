@@ -1,5 +1,8 @@
 package jms.dan.usuarios.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
@@ -10,7 +13,19 @@ public class Client {
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
+    @JsonIgnore
     private List<Construction> constructions;
+
+    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user) {
+        this.id = id;
+        this.businessName = businessName;
+        this.cuit = cuit;
+        this.mail = mail;
+        this.maxCurrentAccount = maxCurrentAccount;
+        this.onlineEnabled = onlineEnabled;
+        this.user = user;
+        this.constructions = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;
