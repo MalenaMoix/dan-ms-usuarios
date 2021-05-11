@@ -12,14 +12,14 @@ pipeline {
                 bat "./mvnw clean"
             }
         }
-        stage('clean-develop') {
+        stage('clean-dev') {
             when {
-                branch 'develop'
+                branch 'dev'
             }
             steps {
                 bat "java -version"
                 bat "./mvnw clean"
-                bat "echo buildeando develop"
+                bat "echo buildeando dev"
             }
         }
         stage('backend tests') {
