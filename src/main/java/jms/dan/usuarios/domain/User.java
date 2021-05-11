@@ -6,6 +6,9 @@ public class User {
     private String password;
     private UserType userType;
 
+    public User() {
+    }
+
     public User(Integer id, String user, String password, UserType userType) {
         this.id = id;
         this.user = user;

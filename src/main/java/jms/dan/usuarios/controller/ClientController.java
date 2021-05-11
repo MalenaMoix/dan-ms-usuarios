@@ -1,8 +1,13 @@
 package jms.dan.usuarios.controller;
 
+import io.swagger.annotations.*;
 import jms.dan.usuarios.domain.Client;
+import jms.dan.usuarios.exceptions.ApiError;
+import jms.dan.usuarios.exceptions.ApiException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,21 +17,36 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/clients")
+@Api(value = "ClientController", description = "Allows to manage clients")
 public class ClientController {
     private static final List<Client> clientsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
+    @ApiOperation(value = "Get client by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Client found correctly."),
+            @ApiResponse(code = 404, message = "Client id $id don't exist.")
+    })
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable Integer id){
-        Optional<Client> client = clientsList
-                .stream()
-                .filter(cli -> cli.getId().equals(id))
-                .findFirst();
-        return ResponseEntity.of(client);
+    public ResponseEntity getClientById(@PathVariable Integer id) {
+        try {
+            Client client = clientsList
+                    .stream()
+                    .filter(cli -> cli.getId().equals(id))
+                    .findFirst().orElse(null);
+            if (client == null) return new ResponseEntity(
+                    new ApiError(HttpStatus.NOT_FOUND.toString(), "Client id "+id+" don't exist.", HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Client>(client, HttpStatus.OK);
+        } catch (ApiException e) {
+            return new ResponseEntity(
+                    new ApiError(e.getCode(), e.getDescription(), e.getStatusCode()),
+                    HttpStatus.valueOf(e.getStatusCode()));
+        }
     }
 
     @GetMapping(path = "/cuit/{cuit}")
-    public ResponseEntity<Client> getClientByCuit(@PathVariable String cuit){
+    public ResponseEntity<Client> getClientByCuit(@PathVariable String cuit) {
         Optional<Client> client = clientsList
                 .stream()
                 .filter(cli -> cli.getCuit().equals(cuit))
@@ -43,7 +63,7 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Client>> getAllClients(){
+    public ResponseEntity<List<Client>> getAllClients() {
         return ResponseEntity.ok(clientsList);
     }
 
@@ -59,7 +79,7 @@ public class ClientController {
         OptionalInt indexOpt = IntStream.range(0, clientsList.size())
                 .filter(i -> clientsList.get(i).getId().equals(id))
                 .findFirst();
-        if (indexOpt.isPresent()){
+        if (indexOpt.isPresent()) {
             clientsList.set(indexOpt.getAsInt(), newClient);
             return ResponseEntity.ok(newClient);
         } else {
@@ -68,7 +88,7 @@ public class ClientController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Client> deleteClient(@PathVariable Integer id){
+    public ResponseEntity<Client> deleteClient(@PathVariable Integer id) {
         OptionalInt indexOpt = IntStream.range(0, clientsList.size()).filter(i -> clientsList.get(i).getId().equals(id)).findFirst();
 
         if (indexOpt.isPresent()) {
