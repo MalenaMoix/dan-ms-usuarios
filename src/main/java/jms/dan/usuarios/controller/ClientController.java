@@ -29,9 +29,9 @@ public class ClientController {
                     .filter(cli -> cli.getId().equals(id))
                     .findFirst().orElse(null);
             if (client == null) return new ResponseEntity(
-                    new ApiError(HttpStatus.NOT_FOUND.toString(), "Client id "+id+" don't exist.", HttpStatus.NOT_FOUND.value()),
+                    new ApiError(HttpStatus.NOT_FOUND.toString(), "Client id "+id+" does not exist.", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
-            return new ResponseEntity<Client>(client, HttpStatus.OK);
+            return new ResponseEntity(client, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity(
                     new ApiError(e.getCode(), e.getDescription(), e.getStatusCode()),
