@@ -1,11 +1,9 @@
 package jms.dan.usuarios.controller;
 
-
 import jms.dan.usuarios.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
