@@ -1,6 +1,6 @@
 package jms.dan.usuarios.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class Client {
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
-    private Date dischargeDate;
+    private LocalDate dischargeDate;
     @JsonIgnore
     private List<Construction> constructions;
 
@@ -97,11 +97,11 @@ public class Client {
         this.constructions = constructions;
     }
 
-    public Date getDischargeDate() {
+    public LocalDate getDischargeDate() {
         return dischargeDate;
     }
 
-    public void setDischargeDate(Date dischargeDate) {
+    public void setDischargeDate(LocalDate dischargeDate) {
         this.dischargeDate = dischargeDate;
     }
 }

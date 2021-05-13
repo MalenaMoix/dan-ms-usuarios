@@ -34,7 +34,6 @@ public class RepositoryClient implements IRepositoryClient {
 
     @Override
     public void deleteClient(Integer id) {
-        // TODO check if client already made an OrderS
         OptionalInt indexOpt = IntStream.range(0, clientsList.size()).filter(i -> clientsList.get(i).getId().equals(id)).findFirst();
         if (indexOpt.isPresent()) {
             clientsList.remove(indexOpt.getAsInt());

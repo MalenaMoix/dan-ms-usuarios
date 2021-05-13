@@ -10,5 +10,4 @@ public interface IClientService {
     void createClient(Client newClient);
     Client updateClient(Integer id, Client newClient);
     void deleteClient(Integer id);
-    Boolean getCreditSituation();
 }

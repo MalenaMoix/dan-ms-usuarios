@@ -2,12 +2,19 @@ package jms.dan.usuarios.service;
 
 import jms.dan.usuarios.domain.Client;
 import jms.dan.usuarios.domain.User;
+import jms.dan.usuarios.dto.OrderDTO;
 import jms.dan.usuarios.repository.RepositoryClient;
 import jms.dan.usuarios.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,6 +23,8 @@ public class ClientService implements IClientService {
     private RepositoryClient repositoryClient;
     @Autowired
     private RepositoryUser repositoryUser;
+    @Autowired
+    private IAccountService iAccountService;
 
     @Override
     public Client getClientById(Integer id) {
@@ -52,10 +61,10 @@ public class ClientService implements IClientService {
         if (client != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this cuit already exists");
         }
-        // TODO check credit situation
 
         Client newClient = new Client();
         newClient.setMail(clientToCreate.getMail());
+        newClient.setOnlineEnabled(iAccountService.checkClientCreditSituation(clientToCreate.getCuit()));
 
         User newUser = repositoryUser.createUser(clientToCreate.getUser(), clientToCreate.getUser().getUserType());
         newClient.setUser(newUser);
@@ -88,12 +97,24 @@ public class ClientService implements IClientService {
     public void deleteClient(Integer id) {
         Client client = repositoryClient.getClientById(id);
         if (client == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
-        repositoryClient.deleteClient(id);
-    }
 
-    @Override
-    public Boolean getCreditSituation() {
-        // TODO
-        return true;
+        WebClient webClient = WebClient.create("http://localhost:8080/api/orders");
+        try {
+            ResponseEntity<List<OrderDTO>> response = webClient.get()
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .toEntityList(OrderDTO.class)
+                    .block();
+
+            if (response != null && response.getBody() != null) {
+                if (response.getBody().size() > 0) {
+                    client.setDischargeDate(LocalDate.now());
+                } else {
+                    repositoryClient.deleteClient(id);
+                }
+            }
+        } catch (WebClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error has occurred");
+        }
     }
 }
