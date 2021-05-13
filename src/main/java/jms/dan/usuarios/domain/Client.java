@@ -16,6 +16,9 @@ public class Client {
     @JsonIgnore
     private List<Construction> constructions;
 
+    public Client() {
+    }
+
     public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user) {
         this.id = id;
         this.businessName = businessName;

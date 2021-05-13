@@ -1,0 +1,599 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Users Swagger"
+host: "localhost:8080"
+basePath: "/api-users"
+tags:
+- name: "Client"
+  description: "Allows to manage clients"
+- name: "Employee"
+  description: "Allows to manage employees"
+- name: "Construction"
+  description: "Allows to manage constructions"
+paths:
+  /clients:
+    post:
+      tags:
+      - "Client"
+      summary: "Add a new client"
+      description: ""
+      operationId: "createClient"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Client that needs to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/Client"
+      responses:
+        "200":
+          description: "Client created correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    get:
+      tags:
+      - "Client"
+      summary: "Search clients"
+      description: "Returns a list of clients"
+      operationId: "getClients"
+      parameters:
+        - name: "businessName"
+          in: "query"
+          description: "Business name of clients to return"
+          required: false
+          type: "string"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Returns all the clients filter by parameters"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Client"
+        "404":
+          description: "Clients not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/cuit/{clientCuit}:
+    get:
+      tags:
+      - "Client"
+      summary: "Find client by CUIT"
+      description: "Returns a single client"
+      operationId: "getClientByCuit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientCuit"
+        in: "path"
+        description: "CUIT of client to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Client found correctly"
+          schema:
+            $ref: "#/definitions/Client"
+        "400":
+          description: "Invalid CUIT supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Client not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/{clientId}:
+    get:
+      tags:
+      - "Client"
+      summary: "Find client by ID"
+      description: "Returns a single client"
+      operationId: "getClientById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientId"
+        in: "path"
+        description: "ID of client to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Client found correctly"
+          schema:
+            $ref: "#/definitions/Client"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Client not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+      - "Client"
+      summary: "Update an existing client"
+      description: ""
+      operationId: "updateClient"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Client that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Client"
+      - name: "clientId"
+        in: "path"
+        description: "ID of client to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Client updated correctly"
+          schema:
+            $ref: "#/definitions/Client"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Client not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Validation exception"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    delete:
+      tags:
+      - "Client"
+      summary: "Deletes a client"
+      description: ""
+      operationId: "deleteClient"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientId"
+        in: "path"
+        required: true
+        type: "integer"
+        description: "ID of the client to delete"
+      responses:
+        "200":
+          description: "Client deleted correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Client not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/employees/:
+    post:
+      tags:
+      - "Employee"
+      summary: "Add a new employee"
+      description: ""
+      operationId: "createEmployee"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Employee that needs to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
+      responses:
+        "200":
+          description: "Employee created correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    get:
+      tags:
+      - "Employee"
+      summary: "Get all employees"
+      description: "Returns a list of clients"
+      operationId: "getAllEmployees"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "RequestParam"
+        name: "body"
+        description: "Name of the employees to search for"
+        required: false
+        schema:
+          $ref: "#/definitions/Employee"
+      responses:
+        "200":
+          description: "Employees found correctly"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
+        "404":
+          description: "Employees not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/employees/{employeeId}:
+    get:
+      tags:
+      - "Employee"
+      summary: "Find employee by ID"
+      description: "Returns a single employee"
+      operationId: "getEmployeeById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "ID of employee to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Employee found correctly"
+          schema:
+            $ref: "#/definitions/Employee"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+      - "Employee"
+      summary: "Update an existing employee"
+      description: ""
+      operationId: "updateEmployee"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Employee that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
+      - name: "employeeId"
+        in: "path"
+        description: "ID of employee to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Employee updated correctly"
+          schema:
+            $ref: "#/definitions/Employee"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Validation exception"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    delete:
+      tags:
+      - "Employee"
+      summary: "Deletes a employee"
+      description: ""
+      operationId: "deleteEmployee"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        required: true
+        type: "integer"
+        description: "ID of the employee to delete"
+      responses:
+        "200":
+          description: "Employee deleted correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/constructions/:
+    post:
+      tags:
+      - "Construction"
+      summary: "Add a new construction"
+      description: ""
+      operationId: "createConstruction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Construction that needs to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/Construction"
+      responses:
+        "200":
+          description: "Construction created correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    get:
+      tags:
+      - "Construction"
+      summary: "Get all constructions"
+      description: "Returns a list of constructions"
+      operationId: "getAllConstructions"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "RequestParam"
+        name: "clientId"
+        description: "ID of the client that has constructions"
+        required: false
+        type: "integer"
+      - in: "RequestParam"
+        name: "constructionTypeId"
+        description: "ID of the construction type to search for"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Constructions found correctly"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Construction"
+        "404":
+          description: "Constructions not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /clients/constructions/{constructionId}:
+    get:
+      tags:
+      - "Construction"
+      summary: "Find construction by ID"
+      description: "Returns a single construction"
+      operationId: "getConstructionById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "constructionId"
+        in: "path"
+        description: "ID of construction to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Construction found correctly"
+          schema:
+            $ref: "#/definitions/Construction"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Construction not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+      - "Construction"
+      summary: "Update an existing construction"
+      description: ""
+      operationId: "updateConstruction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Construction that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
+      - name: "constructionId"
+        in: "path"
+        description: "ID of construction to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Construction updated correctly"
+          schema:
+            $ref: "#/definitions/Construction"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Construction not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Validation exception"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    delete:
+      tags:
+      - "Construction"
+      summary: "Deletes a construction"
+      description: ""
+      operationId: "deleteConstruction"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "constructionId"
+        in: "path"
+        required: true
+        type: "integer"
+        description: "ID of the construction to delete"
+      responses:
+        "200":
+          description: "Construction deleted correctly"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Construction not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+definitions:
+  Construction:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      description:
+        type: "string"
+        example: "Reforma de hogar"
+      latitude:
+        type: "number"
+        example: 25.63369
+      longitude:
+        type: "number"
+        example: 80.13266
+      address:
+        type: "string"
+        example: "Las Heras 3565, Santa Fe, Argentina"
+      area:
+        type: "integer"
+        example: 200
+      constructionTypeId:
+        type: "string"
+        example: "Aca iria el id de la obra pero santiago tambien quiere la clase"
+      client:
+        $ref: "#/definitions/Client"
+    xml:
+      name: "Construction"
+  UserType:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      type:
+        type: "string"
+        example: "cliente"
+    xml:
+      name: "UserType"
+  ConstructionType:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      type:
+        type: "string"
+        example: "Reparacion"
+    xml:
+      name: "UserType"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      user:
+        type: "string"
+        example: "mdominguez"
+      password:
+        type: "string"
+        example: "123456"
+      userType:
+        $ref: "#/definitions/UserType"
+    xml:
+      name: "User"
+  Client:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "1"
+      bussinessName:
+        type: "string"
+        example: "Cliente 01"
+      cuit:
+        type: "string"
+        example: "2099988871"
+      mail:
+        type: "string"
+        example: "martin@mail.com"
+      maxCurrentAccount:
+        type: "number"
+        example: "10000"
+      onlineEnabled:
+        type: "boolean"
+        example: "true"
+      user:
+        $ref: "#/definitions/User"
+    xml:
+      name: "Client"
+  Employee:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "1"
+      mail:
+        type: "string"
+        example: "pablo@mail.com"
+      user:
+        $ref: "#/definitions/User"
+    xml:
+      name: "Employee"
+  ApiResponse:
+    type: "object"
+    properties:
+      body:
+        type: "object"
+      statusCode:
+        type: "string"
+      statusCodeValue:
+        type: "string"
