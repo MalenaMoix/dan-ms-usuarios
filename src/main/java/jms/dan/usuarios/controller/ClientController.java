@@ -1,6 +1,5 @@
 package jms.dan.usuarios.controller;
 
-import io.swagger.annotations.*;
 import jms.dan.usuarios.domain.Client;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;
@@ -12,21 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/api/clients")
-@Api(value = "ClientController", description = "Allows to manage clients")
+@RequestMapping("/clients")
 public class ClientController {
     private static final List<Client> clientsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
-    @ApiOperation(value = "Get client by id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Client found correctly."),
-            @ApiResponse(code = 404, message = "Client id $id don't exist.")
-    })
     @GetMapping(path = "/{id}")
     public ResponseEntity getClientById(@PathVariable Integer id) {
         try {
@@ -54,16 +48,11 @@ public class ClientController {
         return ResponseEntity.of(client);
     }
 
-    @GetMapping(path = "/businessName")
-    public ResponseEntity<Stream<Client>> getClientByBusinessName(@RequestParam(required = false) String businessName) {
-        if (businessName != null) {
-            return ResponseEntity.ok(clientsList.stream().filter(client -> client.getBusinessName().equalsIgnoreCase(businessName)));
-        }
-        return ResponseEntity.ok(clientsList.stream());
-    }
-
     @GetMapping
-    public ResponseEntity<List<Client>> getAllClients() {
+    public ResponseEntity<List<Client>> getClients(@RequestParam(required = false) String businessName) {
+        if (businessName != null) {
+            return ResponseEntity.ok(clientsList.stream().filter(client -> client.getBusinessName().equalsIgnoreCase(businessName)).collect(Collectors.toList()));
+        }
         return ResponseEntity.ok(clientsList);
     }
 
