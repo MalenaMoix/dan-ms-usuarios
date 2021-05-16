@@ -2,7 +2,6 @@ package jms.dan.usuarios.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +13,11 @@ public class Client {
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
+    private Date dischargeDate;
     @JsonIgnore
     private List<Construction> constructions;
-    private Date dischargeDate;
+
+    public Client(){}
 
     public Client() {
     }

@@ -12,6 +12,8 @@ public class Construction {
     private Client client;
     private Integer clientId;
 
+    public Construction() {}
+
     public Integer getId() {
         return id;
     }

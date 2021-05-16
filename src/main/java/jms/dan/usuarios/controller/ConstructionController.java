@@ -36,7 +36,7 @@ public class ConstructionController {
         User userOne = new User(0, "pepitoSRL", "123456", clientUserType);
         User userTwo = new User(1, "JorgeRivas", "123456", clientUserType);
         Client clientOne = new Client(0, "Pepito S.R.L", "30-5569331-6", "compras@pepitosrl.com.ar", 1000000.00, true, userOne);
-        Client clientTwo = new Client(1, "Jorge Rivas", "22-25684336-7", "rivasjorge@gmail.com", 500000.00, true, userTwo);
+        Client clientTwo = new Client(1, "Jorge Rivas", "2222", "rivasjorge@gmail.com", 500000.00, true, userTwo);
         clientsList.add(clientOne);
         clientsList.add(clientTwo);
     }
