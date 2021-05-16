@@ -1,23 +1,16 @@
 package jms.dan.usuarios.controller;
 
 import jms.dan.usuarios.domain.Client;
-import jms.dan.usuarios.service.IClientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jms.dan.usuarios.dto.ClientDTO;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;
+import jms.dan.usuarios.service.IClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/clients")
@@ -29,9 +22,11 @@ public class ClientController {
     public ResponseEntity<?> getClientById(@PathVariable Integer id){
         try {
             Client client = iClientService.getClientById(id);
-            return ResponseEntity.ok(client);
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatus()).body(e.getReason());
+            return new ResponseEntity<>(client, HttpStatus.OK);
+        } catch (ApiException e) {
+            return new ResponseEntity<>(
+                    new ApiError(e.getCode(), e.getDescription(), e.getStatusCode()),
+                    HttpStatus.valueOf(e.getStatusCode()));
         }
     }
 
@@ -46,21 +41,26 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Client>> getAllClients(@RequestParam(required = false) String businessName){
+    public ResponseEntity<List<Client>> getClients(@RequestParam(required = false) String businessName){
         return ResponseEntity.ok(iClientService.getClients(businessName));
     }
 
     @PostMapping
-    public ResponseEntity<String> createClient(@RequestBody Client newClient) {
-        if (newClient.getConstructions() == null || newClient.getConstructions().size() == 0) {
+    public ResponseEntity<String> createClient(@RequestBody ClientDTO clientDTO) {
+        // TODO check if it's a list before doing .size()
+        if (clientDTO.getConstructions() == null || clientDTO.getConstructions().size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You must specify at least one construction");
         }
-        if (newClient.getUser() == null || newClient.getUser().getPassword() == null) {
+        if (clientDTO.getConstructions() != null && clientDTO.getConstructions().size() > 0 &&
+                (clientDTO.getConstructions().get(0).getClientId() == null || clientDTO.getConstructions().get(0).getConstructionTypeId() == null)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You must specify a client and a construction type");
+        }
+        if (clientDTO.getUser() == null || clientDTO.getUser().getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user information specified");
         }
 
         try {
-            iClientService.createClient(newClient);
+            iClientService.createClient(clientDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Client created successfully");
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getReason());

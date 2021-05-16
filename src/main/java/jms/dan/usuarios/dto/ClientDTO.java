@@ -1,33 +1,30 @@
-package jms.dan.usuarios.domain;
+package jms.dan.usuarios.dto;
 
-import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
+import jms.dan.usuarios.domain.Construction;
+import jms.dan.usuarios.domain.User;
+
 import java.util.List;
 
-public class Client {
+public class ClientDTO {
     private Integer id;
     private String businessName;
     private String cuit;
     private String mail;
-    private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
-    private LocalDate dischargeDate;
-    @JsonIgnore
     private List<Construction> constructions;
 
-    public Client() {}
+    public ClientDTO() {
+    }
 
-    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user) {
+    public ClientDTO(Integer id, String businessName, String cuit, String mail, Boolean onlineEnabled, User user, List<Construction> constructions) {
         this.id = id;
         this.businessName = businessName;
         this.cuit = cuit;
         this.mail = mail;
-        this.maxCurrentAccount = maxCurrentAccount;
         this.onlineEnabled = onlineEnabled;
         this.user = user;
-        this.constructions = new ArrayList<>();
+        this.constructions = constructions;
     }
 
     public Integer getId() {
@@ -62,14 +59,6 @@ public class Client {
         this.mail = mail;
     }
 
-    public Double getMaxCurrentAccount() {
-        return maxCurrentAccount;
-    }
-
-    public void setMaxCurrentAccount(Double maxCurrentAccount) {
-        this.maxCurrentAccount = maxCurrentAccount;
-    }
-
     public Boolean getOnlineEnabled() {
         return onlineEnabled;
     }
@@ -92,13 +81,5 @@ public class Client {
 
     public void setConstructions(List<Construction> constructions) {
         this.constructions = constructions;
-    }
-
-    public LocalDate getDischargeDate() {
-        return dischargeDate;
-    }
-
-    public void setDischargeDate(LocalDate dischargeDate) {
-        this.dischargeDate = dischargeDate;
     }
 }

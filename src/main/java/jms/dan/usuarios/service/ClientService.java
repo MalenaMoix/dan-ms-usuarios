@@ -2,7 +2,9 @@ package jms.dan.usuarios.service;
 
 import jms.dan.usuarios.domain.Client;
 import jms.dan.usuarios.domain.User;
+import jms.dan.usuarios.dto.ClientDTO;
 import jms.dan.usuarios.dto.OrderDTO;
+import jms.dan.usuarios.exceptions.ApiException;
 import jms.dan.usuarios.repository.RepositoryClient;
 import jms.dan.usuarios.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,9 @@ public class ClientService implements IClientService {
     @Override
     public Client getClientById(Integer id) {
         Client client = repositoryClient.getClientById(id);
-        if (client == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
+        if (client == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Client not found", HttpStatus.NOT_FOUND.value());
+        }
         return client;
     }
 
@@ -53,23 +57,24 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    public void createClient(Client clientToCreate) {
-        if (!repositoryUser.isValidUserTypeId(clientToCreate.getUser().getUserType().getId())) {
+    public void createClient(ClientDTO clientDTO) {
+        if (!repositoryUser.isValidUserTypeId(clientDTO.getUser().getUserType().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
         }
-        Client client = repositoryClient.getClientByCuit(clientToCreate.getCuit());
+        Client client = repositoryClient.getClientByCuit(clientDTO.getCuit());
         if (client != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this cuit already exists");
         }
 
         Client newClient = new Client();
-        newClient.setMail(clientToCreate.getMail());
-        newClient.setOnlineEnabled(iAccountService.checkClientCreditSituation(clientToCreate.getCuit()));
-
-        User newUser = repositoryUser.createUser(clientToCreate.getUser(), clientToCreate.getUser().getUserType());
+        newClient.setMail(clientDTO.getMail());
+        newClient.setBusinessName(clientDTO.getBusinessName());
+        newClient.setCuit(clientDTO.getCuit());
+        newClient.setOnlineEnabled(iAccountService.checkClientCreditSituation(clientDTO.getCuit()));
+        User newUser = repositoryUser.createUser(clientDTO.getUser(), clientDTO.getUser().getUserType());
         newClient.setUser(newUser);
 
-        repositoryClient.createClient(clientToCreate);
+        repositoryClient.createClient(newClient);
     }
 
     @Override
@@ -82,12 +87,7 @@ public class ClientService implements IClientService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this email already exists");
         }
 
-        Client newClient = new Client();
-        newClient.setId(id);
-        newClient.setMail(clientToUpdate.getMail());
-        newClient.setUser(clientToUpdate.getUser());
-
-        Client clientUpdated = repositoryClient.updateClient(newClient, id);
+        Client clientUpdated = repositoryClient.updateClient(clientToUpdate, id);
         if (clientUpdated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
 
         return clientUpdated;
@@ -98,7 +98,7 @@ public class ClientService implements IClientService {
         Client client = repositoryClient.getClientById(id);
         if (client == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
 
-        WebClient webClient = WebClient.create("http://localhost:8080/api/orders");
+        WebClient webClient = WebClient.create("http://localhost:8081/api-orders/orders?clientId=" + id);
         try {
             ResponseEntity<List<OrderDTO>> response = webClient.get()
                     .accept(MediaType.APPLICATION_JSON)

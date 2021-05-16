@@ -66,6 +66,7 @@ public class RepositoryClient implements IRepositoryClient {
 
     @Override
     public List<Client> getAllClients() {
-        return clientsList.stream().filter(client -> client.getDischargeDate() == null).collect(Collectors.toList());
+        return clientsList;
+        // return clientsList.stream().filter(client -> client.getDischargeDate() == null).collect(Collectors.toList());
     }
 }
