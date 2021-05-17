@@ -14,19 +14,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class ClientService implements IClientService {
+    final RepositoryUser repositoryUser;
+    final AccountService accountService;
+    final RepositoryClient repositoryClient;
+
     @Autowired
-    private RepositoryClient repositoryClient;
-    @Autowired
-    private RepositoryUser repositoryUser;
-    @Autowired
-    private IAccountService iAccountService;
+    public ClientService(RepositoryClient repositoryClient, RepositoryUser repositoryUser, AccountService accountService) {
+        this.repositoryClient = repositoryClient;
+        this.repositoryUser = repositoryUser;
+        this.accountService = accountService;
+    }
 
     @Override
     public Client getClientById(Integer id) {
@@ -40,7 +42,9 @@ public class ClientService implements IClientService {
     @Override
     public Client getClientByCuit(String cuit) {
         Client client = repositoryClient.getClientByCuit(cuit);
-        if (client == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
+        if (client == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Client not found", HttpStatus.NOT_FOUND.value());
+        }
         return client;
     }
 
@@ -52,25 +56,24 @@ public class ClientService implements IClientService {
         } else {
             clients = repositoryClient.getAllClients();
         }
-
         return clients;
     }
 
     @Override
     public void createClient(ClientDTO clientDTO) {
         if (!repositoryUser.isValidUserTypeId(clientDTO.getUser().getUserType().getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
+            throw new ApiException(HttpStatus.BAD_REQUEST.toString(), "Invalid user type specified", HttpStatus.BAD_REQUEST.value());
         }
         Client client = repositoryClient.getClientByCuit(clientDTO.getCuit());
         if (client != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this cuit already exists");
+            throw new ApiException(HttpStatus.BAD_REQUEST.toString(), "A client with this cuit already exists", HttpStatus.BAD_REQUEST.value());
         }
 
         Client newClient = new Client();
         newClient.setMail(clientDTO.getMail());
         newClient.setBusinessName(clientDTO.getBusinessName());
         newClient.setCuit(clientDTO.getCuit());
-        newClient.setOnlineEnabled(iAccountService.checkClientCreditSituation(clientDTO.getCuit()));
+        newClient.setOnlineEnabled(accountService.checkClientCreditSituation(clientDTO.getCuit()));
         User newUser = repositoryUser.createUser(clientDTO.getUser(), clientDTO.getUser().getUserType());
         newClient.setUser(newUser);
 
@@ -80,15 +83,17 @@ public class ClientService implements IClientService {
     @Override
     public Client updateClient(Integer id, Client clientToUpdate) {
         if (!repositoryUser.isValidUserTypeId(clientToUpdate.getUser().getUserType().getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type specified");
+            throw new ApiException(HttpStatus.BAD_REQUEST.toString(), "Invalid user type specified", HttpStatus.BAD_REQUEST.value());
         }
         Client client = getClientByCuit(clientToUpdate.getCuit());
         if (client != null && !clientToUpdate.getId().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A client with this email already exists");
+            throw new ApiException(HttpStatus.BAD_REQUEST.toString(), "A client with this cuit already exists", HttpStatus.BAD_REQUEST.value());
         }
 
         Client clientUpdated = repositoryClient.updateClient(clientToUpdate, id);
-        if (clientUpdated == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
+        if (clientUpdated == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Client not found", HttpStatus.NOT_FOUND.value());
+        }
 
         return clientUpdated;
     }
@@ -96,7 +101,9 @@ public class ClientService implements IClientService {
     @Override
     public void deleteClient(Integer id) {
         Client client = repositoryClient.getClientById(id);
-        if (client == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
+        if (client == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Client not found", HttpStatus.NOT_FOUND.value());
+        }
 
         WebClient webClient = WebClient.create("http://localhost:8081/api-orders/orders?clientId=" + id);
         try {
@@ -114,7 +121,7 @@ public class ClientService implements IClientService {
                 }
             }
         } catch (WebClientException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error has occurred");
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "An error has occurred", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 }

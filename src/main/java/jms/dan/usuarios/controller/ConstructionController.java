@@ -3,6 +3,7 @@ package jms.dan.usuarios.controller;
 import jms.dan.usuarios.domain.*;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;
+import jms.dan.usuarios.service.ConstructionService;
 import jms.dan.usuarios.service.IConstructionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,13 +14,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/constructions")
 public class ConstructionController {
+    final ConstructionService constructionService;
+
     @Autowired
-    private IConstructionService iConstructionService;
+    public ConstructionController(ConstructionService constructionService) {
+        this.constructionService = constructionService;
+    }
 
     @PostMapping
     public ResponseEntity<?> createConstruction(@RequestBody Construction newConstruction) {
         try {
-            iConstructionService.createConstruction(newConstruction);
+            constructionService.createConstruction(newConstruction);
             return ResponseEntity.status(HttpStatus.CREATED).body("Construction created successfully");
         } catch (ApiException e) {
             return new ResponseEntity<>(
@@ -31,7 +36,7 @@ public class ConstructionController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteConstruction(@PathVariable Integer id) {
         try {
-            iConstructionService.deleteConstruction(id);
+            constructionService.deleteConstruction(id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Construction deleted successfully");
         } catch (ApiException e) {
             return new ResponseEntity<>(
@@ -42,13 +47,13 @@ public class ConstructionController {
 
     @GetMapping
     public ResponseEntity<List<Construction>> getConstructions(@RequestParam(required = false) Integer clientId, @RequestParam(required = false) Integer constructionTypeId) {
-        return ResponseEntity.ok(iConstructionService.getConstructions(clientId, constructionTypeId));
+        return ResponseEntity.ok(constructionService.getConstructions(clientId, constructionTypeId));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getConstructionById(@PathVariable Integer id) {
         try {
-            Construction construction = iConstructionService.getConstructionById(id);
+            Construction construction = constructionService.getConstructionById(id);
             return new ResponseEntity<>(construction, HttpStatus.OK);
         } catch (ApiException e) {
             return new ResponseEntity<>(
@@ -60,7 +65,7 @@ public class ConstructionController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateConstruction(@PathVariable Integer id, @RequestBody Construction newConstruction) {
         try {
-            Construction construction = iConstructionService.updateConstruction(id, newConstruction);
+            Construction construction = constructionService.updateConstruction(id, newConstruction);
             return ResponseEntity.ok(construction);
         } catch (ApiException e) {
             return new ResponseEntity<>(

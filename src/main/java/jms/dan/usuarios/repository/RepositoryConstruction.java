@@ -18,8 +18,12 @@ public class RepositoryConstruction implements IRepositoryConstruction {
     private static final List<Construction> constructionsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
+    final RepositoryClient repositoryClient;
+
     @Autowired
-    private IRepositoryClient iRepositoryClient;
+    public RepositoryConstruction(RepositoryClient repositoryClient) {
+        this.repositoryClient = repositoryClient;
+    }
 
     @PostConstruct
     private void init() {
@@ -38,7 +42,7 @@ public class RepositoryConstruction implements IRepositoryConstruction {
         ConstructionType type = constructionTypesList.stream().filter(c -> newConstruction.getConstructionTypeId().equals(c.getId()))
                 .findAny()
                 .orElse(null);
-        Client client = iRepositoryClient.getAllClients().stream().filter(c -> newConstruction.getClientId().equals(c.getId()))
+        Client client = repositoryClient.getAllClients().stream().filter(c -> newConstruction.getClientId().equals(c.getId()))
                 .findAny()
                 .orElse(null);
         if (type == null || client == null) {
@@ -63,7 +67,7 @@ public class RepositoryConstruction implements IRepositoryConstruction {
             ConstructionType type = constructionTypesList.stream().filter(c -> newConstruction.getConstructionTypeId().equals(c.getId()))
                     .findAny()
                     .orElse(null);
-            Client client = iRepositoryClient.getAllClients().stream().filter(c -> newConstruction.getClientId().equals(c.getId()))
+            Client client = repositoryClient.getAllClients().stream().filter(c -> newConstruction.getClientId().equals(c.getId()))
                     .findAny()
                     .orElse(null);
             if (type == null || client == null) {
@@ -111,7 +115,7 @@ public class RepositoryConstruction implements IRepositoryConstruction {
     }
 
     private void deleteAssociationsOfConstruction(Integer idConstructionToDelete) {
-        Client clientAssociated = iRepositoryClient.getAllClients().stream().filter(
+        Client clientAssociated = repositoryClient.getAllClients().stream().filter(
                 client -> getConstructions(client.getId(), null).stream()
                         .filter(construction -> construction.getId().
                                 equals(idConstructionToDelete)).findAny().isEmpty()).findFirst().orElse(null);
