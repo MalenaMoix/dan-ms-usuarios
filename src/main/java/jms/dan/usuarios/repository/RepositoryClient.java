@@ -24,7 +24,7 @@ public class RepositoryClient implements IRepositoryClient {
         OptionalInt indexOpt = IntStream.range(0, clientsList.size())
                 .filter(i -> clientsList.get(i).getId().equals(id))
                 .findFirst();
-        if (indexOpt.isPresent()){
+        if (indexOpt.isPresent() && clientsList.get(indexOpt.getAsInt()).getDischargeDate() == null){
             clientsList.set(indexOpt.getAsInt(), newClient);
             return newClient;
         } else {
@@ -66,7 +66,6 @@ public class RepositoryClient implements IRepositoryClient {
 
     @Override
     public List<Client> getAllClients() {
-        return clientsList;
-        // return clientsList.stream().filter(client -> client.getDischargeDate() == null).collect(Collectors.toList());
+        return clientsList.stream().filter(client -> client.getDischargeDate() == null).collect(Collectors.toList());
     }
 }
