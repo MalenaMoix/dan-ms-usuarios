@@ -12,18 +12,20 @@ public class ClientDTO {
     private String mail;
     private Boolean onlineEnabled;
     private User user;
+    private Float currentBalance;
     private List<Construction> constructions;
 
     public ClientDTO() {
     }
 
-    public ClientDTO(Integer id, String businessName, String cuit, String mail, Boolean onlineEnabled, User user, List<Construction> constructions) {
+    public ClientDTO(Integer id, String businessName, String cuit, String mail, Boolean onlineEnabled, User user, List<Construction> constructions, Float currentBalance) {
         this.id = id;
         this.businessName = businessName;
         this.cuit = cuit;
         this.mail = mail;
         this.onlineEnabled = onlineEnabled;
         this.user = user;
+        this.currentBalance = currentBalance;
         this.constructions = constructions;
     }
 
@@ -81,5 +83,13 @@ public class ClientDTO {
 
     public void setConstructions(List<Construction> constructions) {
         this.constructions = constructions;
+    }
+
+    public Float getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Float currentBalance) {
+        this.currentBalance = currentBalance;
     }
 }

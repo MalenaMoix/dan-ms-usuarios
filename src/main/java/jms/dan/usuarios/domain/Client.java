@@ -13,19 +13,21 @@ public class Client {
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
+    private Float currentBalance;
     private LocalDate dischargeDate;
     @JsonIgnore
     private List<Construction> constructions;
 
     public Client() {}
 
-    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user) {
+    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user, Float currentBalance) {
         this.id = id;
         this.businessName = businessName;
         this.cuit = cuit;
         this.mail = mail;
         this.maxCurrentAccount = maxCurrentAccount;
         this.onlineEnabled = onlineEnabled;
+        this.currentBalance = currentBalance;
         this.user = user;
         this.constructions = new ArrayList<>();
     }
@@ -100,5 +102,13 @@ public class Client {
 
     public void setDischargeDate(LocalDate dischargeDate) {
         this.dischargeDate = dischargeDate;
+    }
+
+    public Float getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Float currentBalance) {
+        this.currentBalance = currentBalance;
     }
 }

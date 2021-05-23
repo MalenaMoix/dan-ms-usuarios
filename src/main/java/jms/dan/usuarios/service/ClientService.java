@@ -74,6 +74,7 @@ public class ClientService implements IClientService {
         newClient.setBusinessName(clientDTO.getBusinessName());
         newClient.setCuit(clientDTO.getCuit());
         newClient.setOnlineEnabled(accountService.checkClientCreditSituation(clientDTO.getCuit()));
+        newClient.setCurrentBalance(clientDTO.getCurrentBalance());
         User newUser = repositoryUser.createUser(clientDTO.getUser(), clientDTO.getUser().getUserType());
         newClient.setUser(newUser);
 
