@@ -6,10 +6,8 @@ import org.springframework.context.annotation.Primary;
 import springfox.documentation.swagger.web.InMemorySwaggerResourcesProvider;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Configuration
 public class SwaggerConfig {
@@ -21,11 +19,9 @@ public class SwaggerConfig {
             wsResource.setName("1.0.0");
             wsResource.setSwaggerVersion("2.0");
             wsResource.setLocation("/swagger.yaml");
-
             List<SwaggerResource> resources = new ArrayList<>();
             resources.add(wsResource);
             return resources;
         };
     }
 }
-

@@ -4,6 +4,13 @@ public class UserType {
     private Integer id;
     private String type;
 
+    public UserType() {}
+
+    public UserType(Integer id, String type) {
+        this.id = id;
+        this.type = type;
+    }
+
     public Integer getId() {
         return id;
     }
