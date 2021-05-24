@@ -1,10 +1,9 @@
 package jms.dan.usuarios.controller;
 
-import jms.dan.usuarios.domain.*;
+import jms.dan.usuarios.model.*;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;
 import jms.dan.usuarios.service.ConstructionService;
-import jms.dan.usuarios.service.IConstructionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

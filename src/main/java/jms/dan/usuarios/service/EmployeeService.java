@@ -1,7 +1,7 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Employee;
-import jms.dan.usuarios.domain.User;
+import jms.dan.usuarios.model.Employee;
+import jms.dan.usuarios.model.User;
 import jms.dan.usuarios.exceptions.ApiException;
 import jms.dan.usuarios.repository.RepositoryEmployee;
 import jms.dan.usuarios.repository.RepositoryUser;

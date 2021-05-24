@@ -1,6 +1,6 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Construction;
+import jms.dan.usuarios.model.Construction;
 
 import java.util.List;
 

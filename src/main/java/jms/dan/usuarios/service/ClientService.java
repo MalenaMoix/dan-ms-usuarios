@@ -1,7 +1,7 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Client;
-import jms.dan.usuarios.domain.User;
+import jms.dan.usuarios.model.Client;
+import jms.dan.usuarios.model.User;
 import jms.dan.usuarios.dto.ClientDTO;
 import jms.dan.usuarios.dto.OrderDTO;
 import jms.dan.usuarios.exceptions.ApiException;
@@ -74,6 +74,8 @@ public class ClientService implements IClientService {
         newClient.setBusinessName(clientDTO.getBusinessName());
         newClient.setCuit(clientDTO.getCuit());
         newClient.setOnlineEnabled(accountService.checkClientCreditSituation(clientDTO.getCuit()));
+        newClient.setCurrentBalance(clientDTO.getCurrentBalance());
+        newClient.setMaxCurrentAccount(clientDTO.getMaxCurrentAccount());
         User newUser = repositoryUser.createUser(clientDTO.getUser(), clientDTO.getUser().getUserType());
         newClient.setUser(newUser);
 

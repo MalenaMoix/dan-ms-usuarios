@@ -1,6 +1,6 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Construction;
+import jms.dan.usuarios.model.Construction;
 import jms.dan.usuarios.exceptions.ApiException;
 import jms.dan.usuarios.repository.RepositoryConstruction;
 import org.springframework.beans.factory.annotation.Autowired;

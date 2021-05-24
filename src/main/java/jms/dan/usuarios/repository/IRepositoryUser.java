@@ -1,7 +1,7 @@
 package jms.dan.usuarios.repository;
 
-import jms.dan.usuarios.domain.User;
-import jms.dan.usuarios.domain.UserType;
+import jms.dan.usuarios.model.User;
+import jms.dan.usuarios.model.UserType;
 import java.util.List;
 
 public interface IRepositoryUser {

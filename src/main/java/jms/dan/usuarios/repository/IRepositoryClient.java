@@ -1,6 +1,6 @@
 package jms.dan.usuarios.repository;
 
-import jms.dan.usuarios.domain.Client;
+import jms.dan.usuarios.model.Client;
 import java.util.List;
 
 public interface IRepositoryClient {

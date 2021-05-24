@@ -1,6 +1,6 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Employee;
+import jms.dan.usuarios.model.Employee;
 import java.util.List;
 
 public interface IEmployeeService {
