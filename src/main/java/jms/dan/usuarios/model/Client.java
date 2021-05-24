@@ -1,4 +1,4 @@
-package jms.dan.usuarios.domain;
+package jms.dan.usuarios.model;
 
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,14 +13,14 @@ public class Client {
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
     private User user;
-    private Float currentBalance;
+    private Double currentBalance;
     private LocalDate dischargeDate;
     @JsonIgnore
     private List<Construction> constructions;
 
     public Client() {}
 
-    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user, Float currentBalance) {
+    public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user, Double currentBalance) {
         this.id = id;
         this.businessName = businessName;
         this.cuit = cuit;
@@ -104,11 +104,11 @@ public class Client {
         this.dischargeDate = dischargeDate;
     }
 
-    public Float getCurrentBalance() {
+    public Double getCurrentBalance() {
         return currentBalance;
     }
 
-    public void setCurrentBalance(Float currentBalance) {
+    public void setCurrentBalance(Double currentBalance) {
         this.currentBalance = currentBalance;
     }
 }

@@ -1,7 +1,7 @@
 package jms.dan.usuarios.dto;
 
-import jms.dan.usuarios.domain.Construction;
-import jms.dan.usuarios.domain.User;
+import jms.dan.usuarios.model.Construction;
+import jms.dan.usuarios.model.User;
 
 import java.util.List;
 
@@ -12,13 +12,14 @@ public class ClientDTO {
     private String mail;
     private Boolean onlineEnabled;
     private User user;
-    private Float currentBalance;
+    private Double currentBalance;
     private List<Construction> constructions;
+    private Double maxCurrentAccount;
 
     public ClientDTO() {
     }
 
-    public ClientDTO(Integer id, String businessName, String cuit, String mail, Boolean onlineEnabled, User user, List<Construction> constructions, Float currentBalance) {
+    public ClientDTO(Integer id, String businessName, String cuit, String mail, Boolean onlineEnabled, User user, List<Construction> constructions, Double currentBalance, Double maxCurrentAccount) {
         this.id = id;
         this.businessName = businessName;
         this.cuit = cuit;
@@ -27,6 +28,7 @@ public class ClientDTO {
         this.user = user;
         this.currentBalance = currentBalance;
         this.constructions = constructions;
+        this.maxCurrentAccount = maxCurrentAccount;
     }
 
     public Integer getId() {
@@ -85,11 +87,21 @@ public class ClientDTO {
         this.constructions = constructions;
     }
 
-    public Float getCurrentBalance() {
+    public Double getCurrentBalance() {
         return currentBalance;
     }
 
-    public void setCurrentBalance(Float currentBalance) {
+    public Double getMaxCurrentAccount() {
+        return maxCurrentAccount;
+    }
+
+    public void setMaxCurrentAccount(Double maxCurrentAccount) {
+        this.maxCurrentAccount = maxCurrentAccount;
+    }
+
+    public void setCurrentBalance(Double currentBalance) {
         this.currentBalance = currentBalance;
+
+
     }
 }

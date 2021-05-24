@@ -1,6 +1,6 @@
 package jms.dan.usuarios.controller;
 
-import jms.dan.usuarios.domain.Client;
+import jms.dan.usuarios.model.Client;
 import jms.dan.usuarios.dto.ClientDTO;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;

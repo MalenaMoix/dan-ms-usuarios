@@ -1,6 +1,6 @@
 package jms.dan.usuarios.repository;
 
-import jms.dan.usuarios.domain.*;
+import jms.dan.usuarios.model.*;
 import jms.dan.usuarios.exceptions.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

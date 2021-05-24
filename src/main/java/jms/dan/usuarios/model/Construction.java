@@ -1,4 +1,4 @@
-package jms.dan.usuarios.domain;
+package jms.dan.usuarios.model;
 
 public class Construction {
     private Integer id;

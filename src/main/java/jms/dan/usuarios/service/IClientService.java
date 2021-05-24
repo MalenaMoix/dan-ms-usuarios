@@ -1,6 +1,6 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.domain.Client;
+import jms.dan.usuarios.model.Client;
 import jms.dan.usuarios.dto.ClientDTO;
 import java.util.List;
 

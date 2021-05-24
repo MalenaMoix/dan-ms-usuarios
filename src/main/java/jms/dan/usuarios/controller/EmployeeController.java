@@ -1,6 +1,6 @@
 package jms.dan.usuarios.controller;
 
-import jms.dan.usuarios.domain.Employee;
+import jms.dan.usuarios.model.Employee;
 import jms.dan.usuarios.exceptions.ApiError;
 import jms.dan.usuarios.exceptions.ApiException;
 import jms.dan.usuarios.service.EmployeeService;

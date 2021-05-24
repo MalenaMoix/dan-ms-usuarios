@@ -1,6 +1,6 @@
 package jms.dan.usuarios.repository;
 
-import jms.dan.usuarios.domain.Client;
+import jms.dan.usuarios.model.Client;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
