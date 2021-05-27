@@ -1,9 +1,15 @@
 package jms.dan.usuarios.model;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String user;
     private String password;
+    @ManyToOne
     private UserType userType;
 
     public User() {}

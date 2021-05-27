@@ -1,17 +1,21 @@
 package jms.dan.usuarios.repository;
 
 import jms.dan.usuarios.model.Client;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
-public interface IRepositoryClient {
-    void createClient(Client newClient);
+@Repository
+public interface IRepositoryClient extends JpaRepository<Client, Integer> {
+//    void createClient(Client newClient);
 
-    Client updateClient(Client newClient, Integer id);
+//    Client updateClient(Client newClient, Integer id);
 
-    void deleteClient(Integer id);
+//    void deleteClient(Integer id);
 
     Client getClientById(Integer id);
     Client getClientByCuit(String cuit);
-    List<Client> getAllClients();
+    List<Client> findAll();
     List<Client> getClientByBusinessName(String businessName);
 }

@@ -1,11 +1,11 @@
 package jms.dan.usuarios.service;
 
-import jms.dan.usuarios.model.Client;
-import jms.dan.usuarios.model.User;
 import jms.dan.usuarios.dto.ClientDTO;
 import jms.dan.usuarios.dto.OrderDTO;
 import jms.dan.usuarios.exceptions.ApiException;
-import jms.dan.usuarios.repository.RepositoryClient;
+import jms.dan.usuarios.model.Client;
+import jms.dan.usuarios.model.User;
+import jms.dan.usuarios.repository.IRepositoryClient;
 import jms.dan.usuarios.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,10 +22,10 @@ import java.util.List;
 public class ClientService implements IClientService {
     final RepositoryUser repositoryUser;
     final AccountService accountService;
-    final RepositoryClient repositoryClient;
+    final IRepositoryClient repositoryClient;
 
     @Autowired
-    public ClientService(RepositoryClient repositoryClient, RepositoryUser repositoryUser, AccountService accountService) {
+    public ClientService(IRepositoryClient repositoryClient, RepositoryUser repositoryUser, AccountService accountService) {
         this.repositoryClient = repositoryClient;
         this.repositoryUser = repositoryUser;
         this.accountService = accountService;
@@ -54,7 +55,7 @@ public class ClientService implements IClientService {
         if (businessName != null) {
             clients = repositoryClient.getClientByBusinessName(businessName);
         } else {
-            clients = repositoryClient.getAllClients();
+            clients = repositoryClient.findAll();
         }
         return clients;
     }
@@ -79,7 +80,7 @@ public class ClientService implements IClientService {
         User newUser = repositoryUser.createUser(clientDTO.getUser(), clientDTO.getUser().getUserType());
         newClient.setUser(newUser);
 
-        repositoryClient.createClient(newClient);
+        repositoryClient.save(newClient);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class ClientService implements IClientService {
             throw new ApiException(HttpStatus.BAD_REQUEST.toString(), "A client with this cuit already exists", HttpStatus.BAD_REQUEST.value());
         }
 
-        Client clientUpdated = repositoryClient.updateClient(clientToUpdate, id);
+        Client clientUpdated = repositoryClient.save(clientToUpdate);
         if (clientUpdated == null) {
             throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Client not found", HttpStatus.NOT_FOUND.value());
         }
@@ -119,7 +120,7 @@ public class ClientService implements IClientService {
                 if (response.getBody().size() > 0) {
                     client.setDischargeDate(LocalDate.now());
                 } else {
-                    repositoryClient.deleteClient(id);
+                    repositoryClient.deleteById(id);
                 }
             }
         } catch (WebClientException e) {

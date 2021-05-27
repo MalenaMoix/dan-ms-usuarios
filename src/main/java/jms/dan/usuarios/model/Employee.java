@@ -1,8 +1,15 @@
 package jms.dan.usuarios.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Employee {
+    @Id
     private Integer id;
     private String mail;
+    @OneToOne
     private User user;
 
     public Employee() {}

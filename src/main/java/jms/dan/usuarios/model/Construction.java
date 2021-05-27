@@ -1,6 +1,11 @@
 package jms.dan.usuarios.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Construction {
+
+    @Id
     private Integer id;
     private String description;
     private Float latitude;
@@ -8,8 +13,11 @@ public class Construction {
     private String address;
     private Integer area;
     private Integer constructionTypeId;
+    @ManyToOne
     private ConstructionType type;
+    @ManyToOne
     private Client client;
+    @Transient
     private Integer clientId;
 
     public Construction() {}
