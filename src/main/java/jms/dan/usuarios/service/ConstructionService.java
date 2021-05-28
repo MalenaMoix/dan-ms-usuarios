@@ -58,19 +58,16 @@ public class ConstructionService implements IConstructionService {
 
     @Override
     public void deleteConstructionsByClient(Client client) {
-
         List<Construction> constructions = constructionRepository.findConstructionByClient(client);
         if (!constructions.isEmpty()) {
             for (Construction c : constructions) {
                 deleteConstruction(c.getId());
             }
         }
-
     }
 
     @Override
     public List<Construction> getConstructions(Integer clientId, Integer constructionTypeId) {
-        //TODO VERIFICAR QUE FUNCIONE!
         return constructionRepository.findAllByClientIdAndTypeId(clientId, constructionTypeId);
     }
 

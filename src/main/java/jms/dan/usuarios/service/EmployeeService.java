@@ -44,6 +44,7 @@ public class EmployeeService implements IEmployeeService {
         User newUser = new User(employeeToCreate.getUser().getId(), employeeToCreate.getUser().getUser(),
                 employeeToCreate.getUser().getPassword(), userType);
         newEmployee.setUser(newUser);
+        newEmployee.setName(employeeToCreate.getName());
 
         employeeRepository.save(newEmployee);
     }
@@ -80,14 +81,5 @@ public class EmployeeService implements IEmployeeService {
             throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Employee not found", HttpStatus.NOT_FOUND.value());
         }
         return employee;
-    }
-
-    @Override
-    public Employee getEmployeeByEmail(String email) {
-        Employee employee = employeeRepository.findByMail(email);
-        if (employee == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Employee not found", HttpStatus.NOT_FOUND.value());
-        }
-        return null;
     }
 }

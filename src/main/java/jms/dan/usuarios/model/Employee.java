@@ -9,7 +9,7 @@ public class Employee {
     private Integer id;
     private String mail;
     private String name;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
     public Employee() {}

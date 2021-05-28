@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
-@Repository
 public class EmployeeRepository {
     private static final List<Employee> employeesList = new ArrayList<>();
     private static Integer ID_GEN = 1;
