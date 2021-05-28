@@ -8,15 +8,17 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String mail;
+    private String name;
     @OneToOne
     private User user;
 
     public Employee() {}
 
-    public Employee(Integer id, String mail, User user) {
+    public Employee(Integer id, String mail,String name, User user) {
         this.id = id;
         this.mail = mail;
         this.user = user;
+        this.name = name;
     }
 
     public Integer getId() {
@@ -33,6 +35,14 @@ public class Employee {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User getUser() {
