@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Repository
-public class RepositoryConstruction implements IRepositoryConstruction {
+public class ConstructionRepository {
     private static final List<ConstructionType> constructionTypesList = new ArrayList<>();
     private static final List<Construction> constructionsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
-    final IRepositoryClient repositoryClient;
+    final IClientRepository repositoryClient;
 
     @Autowired
-    public RepositoryConstruction(IRepositoryClient repositoryClient) {
+    public ConstructionRepository(IClientRepository repositoryClient) {
         this.repositoryClient = repositoryClient;
     }
 
@@ -40,7 +40,6 @@ public class RepositoryConstruction implements IRepositoryConstruction {
         constructionTypesList.add(road);
     }
 
-    @Override
     public void createConstruction(Construction newConstruction) {
         ConstructionType type = constructionTypesList.stream().filter(c -> newConstruction.getConstructionTypeId().equals(c.getId()))
                 .findAny()
@@ -59,7 +58,6 @@ public class RepositoryConstruction implements IRepositoryConstruction {
 
     }
 
-    @Override
     public Construction updateConstruction(Integer id, Construction newConstruction) {
         OptionalInt indexOpt = IntStream.range(0, constructionsList.size())
                 .filter(i -> constructionsList.get(i).getId().equals(id))
@@ -89,7 +87,6 @@ public class RepositoryConstruction implements IRepositoryConstruction {
         return null;
     }
 
-    @Override
     public void deleteConstruction(Integer id) {
         OptionalInt indexOpt = IntStream.range(0, constructionsList.size())
                 .filter(i -> constructionsList.get(i).getId().equals(id))
@@ -100,12 +97,10 @@ public class RepositoryConstruction implements IRepositoryConstruction {
         }
     }
 
-    @Override
     public Construction getConstructionById(Integer id) {
         return constructionsList.stream().filter(c -> c.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @Override
     public List<Construction> getConstructions(Integer clientId, Integer constructionTypeId) {
         // TODO It Should filter by both params at same time
         if (clientId != null || constructionTypeId != null)

@@ -1,25 +1,21 @@
 package jms.dan.usuarios.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String businessName;
+    @Column(unique = true)
     private String cuit;
     private String mail;
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
-    @OneToOne
-    @JoinColumn(name="user_id",referencedColumnName="id", nullable=false)
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
     private Double currentBalance;
     private LocalDate dischargeDate;

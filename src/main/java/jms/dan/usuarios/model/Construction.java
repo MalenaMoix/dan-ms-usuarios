@@ -6,12 +6,14 @@ import javax.persistence.*;
 public class Construction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String description;
     private Float latitude;
     private Float longitude;
     private String address;
     private Integer area;
+    @Transient
     private Integer constructionTypeId;
     @ManyToOne
     private ConstructionType type;
@@ -20,7 +22,8 @@ public class Construction {
     @Transient
     private Integer clientId;
 
-    public Construction() {}
+    public Construction() {
+    }
 
     public Integer getId() {
         return id;

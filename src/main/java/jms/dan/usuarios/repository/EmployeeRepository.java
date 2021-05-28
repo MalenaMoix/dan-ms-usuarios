@@ -8,17 +8,15 @@ import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 @Repository
-public class RepositoryEmployee implements IRepositoryEmployee {
+public class EmployeeRepository {
     private static final List<Employee> employeesList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
-    @Override
     public void saveEmployee(Employee newEmployee) {
         newEmployee.setId(ID_GEN++);
         employeesList.add(newEmployee);
     }
 
-    @Override
     public Employee updateEmployee(Integer id, Employee newEmployee) {
         OptionalInt indexOpt = IntStream.range(0, employeesList.size())
                 .filter(i -> employeesList.get(i).getId().equals(id))
@@ -31,12 +29,10 @@ public class RepositoryEmployee implements IRepositoryEmployee {
         }
     }
 
-    @Override
     public List<Employee> getAllEmployees() {
         return employeesList;
     }
 
-    @Override
     public List<Employee> getEmployeesByName(String name) {
         List<Employee> employees = new ArrayList<>();
         for (Employee employee : employeesList) {
@@ -47,7 +43,6 @@ public class RepositoryEmployee implements IRepositoryEmployee {
         return employees;
     }
 
-    @Override
     public void deleteEmployee(Integer id) {
         OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getId().equals(id)).findFirst();
         if (indexOpt.isPresent()) {
@@ -55,7 +50,6 @@ public class RepositoryEmployee implements IRepositoryEmployee {
         }
     }
 
-    @Override
     public Employee getEmployeeById(Integer id) {
         OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getId().equals(id)).findFirst();
         if (indexOpt.isPresent()) {
@@ -64,7 +58,6 @@ public class RepositoryEmployee implements IRepositoryEmployee {
         return null;
     }
 
-    @Override
     public Employee getEmployeeByEmail(String email) {
         OptionalInt indexOpt = IntStream.range(0, employeesList.size()).filter(i -> employeesList.get(i).getMail().equals(email)).findFirst();
         if (indexOpt.isPresent()) {

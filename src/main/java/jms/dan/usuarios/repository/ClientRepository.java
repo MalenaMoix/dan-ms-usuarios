@@ -8,7 +8,7 @@ import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class RepositoryClient {
+public class ClientRepository {
     private static final List<Client> clientsList = new ArrayList<>();
     private static Integer ID_GEN = 1;
 
