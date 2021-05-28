@@ -70,8 +70,8 @@ public class ConstructionService implements IConstructionService {
 
     @Override
     public List<Construction> getConstructions(Integer clientId, Integer constructionTypeId) {
-//        return constructionRepository.getConstructions(clientId, constructionTypeId);
-        return null;
+        //TODO VERIFICAR QUE FUNCIONE!
+        return constructionRepository.findAllByClientIdAndTypeId(clientId, constructionTypeId);
     }
 
     @Override
@@ -84,14 +84,16 @@ public class ConstructionService implements IConstructionService {
     }
 
     @Override
-    public Construction updateConstruction(Integer id, Construction construction) {
-        // NOT IMPLEMENTED YET
-//        TODO CORREGIR!
-//        Construction constructionToUpdate = repositoryConstruction.getConstructionById(id);
-//        if (constructionToUpdate == null) {
-//            throw new ApiException(HttpStatus.NOT_FOUND.toString(), "Construction not found", HttpStatus.NOT_FOUND.value());
-//        }
-//        return repositoryConstruction.updateConstruction(id, construction);ç
-        return null;
+    public Construction updateConstruction(Integer id, Construction newConstruction) {
+        Construction construction = getConstructionById(id);
+
+        construction.setAddress(newConstruction.getAddress());
+        construction.setDescription(newConstruction.getDescription());
+        construction.setLatitude(newConstruction.getLatitude());
+        construction.setLongitude(newConstruction.getLongitude());
+        construction.setArea(newConstruction.getArea());
+
+        constructionRepository.save(construction);
+        return construction;
     }
 }
