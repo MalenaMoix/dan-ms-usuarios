@@ -1,18 +1,29 @@
 package jms.dan.usuarios.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Construction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String description;
     private Float latitude;
     private Float longitude;
     private String address;
     private Integer area;
+    @Transient
     private Integer constructionTypeId;
+    @ManyToOne
     private ConstructionType type;
+    @ManyToOne
     private Client client;
+    @Transient
     private Integer clientId;
 
-    public Construction() {}
+    public Construction() {
+    }
 
     public Integer getId() {
         return id;

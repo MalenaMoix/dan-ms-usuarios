@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -22,6 +23,10 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<?> createEmployee(@RequestBody Employee newEmployee) {
+        if (newEmployee.getUser() == null || newEmployee.getUser().getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user information specified");
+        }
+
         try {
             employeeService.createEmployee(newEmployee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
@@ -34,6 +39,10 @@ public class EmployeeController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee newEmployee, @PathVariable Integer id) {
+        if (newEmployee.getUser() == null || newEmployee.getUser().getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user information specified");
+        }
+
         try {
             Employee employeeUpdated = employeeService.updateEmployee(id, newEmployee);
             return ResponseEntity.ok(employeeUpdated);

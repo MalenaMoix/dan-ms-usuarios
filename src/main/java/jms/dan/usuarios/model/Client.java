@@ -1,24 +1,28 @@
 package jms.dan.usuarios.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
-import java.util.List;
 
+@Entity
 public class Client {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String businessName;
+    @Column(unique = true)
     private String cuit;
     private String mail;
     private Double maxCurrentAccount;
     private Boolean onlineEnabled;
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
     private Double currentBalance;
     private LocalDate dischargeDate;
-    @JsonIgnore
-    private List<Construction> constructions;
 
-    public Client() {}
+
+    public Client() {
+    }
 
     public Client(Integer id, String businessName, String cuit, String mail, Double maxCurrentAccount, Boolean onlineEnabled, User user, Double currentBalance) {
         this.id = id;
@@ -29,7 +33,6 @@ public class Client {
         this.onlineEnabled = onlineEnabled;
         this.currentBalance = currentBalance;
         this.user = user;
-        this.constructions = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -86,14 +89,6 @@ public class Client {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<Construction> getConstructions() {
-        return constructions;
-    }
-
-    public void setConstructions(List<Construction> constructions) {
-        this.constructions = constructions;
     }
 
     public LocalDate getDischargeDate() {
