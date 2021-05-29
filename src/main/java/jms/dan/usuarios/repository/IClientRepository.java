@@ -11,9 +11,10 @@ import java.util.List;
 @Repository
 public interface IClientRepository extends JpaRepository<Client, Integer> {
 
-    @Query("SELECT c FROM Client c WHERE c.businessName LIKE %:businessName%")
+    @Query("SELECT c FROM Client c WHERE c.businessName LIKE %:businessName% AND c.dischargeDate IS NULL")
     List<Client> findAllByBusinessName(@Param("businessName") String businessName);
 
-    Client findByCuit(String cuit);
+    @Query("SELECT c FROM Client c WHERE c.cuit = :cuit AND c.dischargeDate IS NULL")
+    Client findByCuit(@Param("cuit")String cuit);
 
 }
