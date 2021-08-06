@@ -7,7 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,14 @@ public class OrderRepository implements IOrderRepository {
     private static final String BASEURL = "http://localhost:8081/api-orders/";
     private static final String ORDERS_URL = BASEURL + "orders";
 
+    private CircuitBreakerFactory circuitBreakerFactory;
+
     @Override
     public List<OrderDTO> getOrdersByClientId(Integer id) {
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
         WebClient webClient = WebClient.create(ORDERS_URL + "?clientId=" + id);
-        try {
+
+        return circuitBreaker.run(() -> {
             ResponseEntity<List<OrderDTO>> response = webClient.get()
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
@@ -36,8 +41,10 @@ public class OrderRepository implements IOrderRepository {
                         "An error has occurred - Orders not found", HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
             return orders;
-        } catch (WebClientException e) {
-            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "An error has occurred", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+        } , throwable -> defaultOrdersByClientId());
+    }
+
+    private List<OrderDTO> defaultOrdersByClientId() {
+        return new ArrayList<>();
     }
 }
