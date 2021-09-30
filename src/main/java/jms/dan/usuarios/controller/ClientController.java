@@ -52,14 +52,6 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
-        // TODO check if it's a list before doing .size()
-        if (clientDTO.getConstructions() == null || clientDTO.getConstructions().size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You must specify at least one construction");
-        }
-        if (clientDTO.getConstructions() != null && clientDTO.getConstructions().size() > 0 &&
-                (clientDTO.getConstructions().get(0).getClientId() == null || clientDTO.getConstructions().get(0).getConstructionTypeId() == null)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You must specify a client and a construction type");
-        }
         if (clientDTO.getUser() == null || clientDTO.getUser().getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user information specified");
         }
