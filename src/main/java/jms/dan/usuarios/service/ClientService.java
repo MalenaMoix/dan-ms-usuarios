@@ -92,10 +92,6 @@ public class ClientService implements IClientService {
         newClient.setUser(newUser);
 
         clientRepository.save(newClient);
-        for (Construction c : clientDTO.getConstructions()) {
-            c.setClientId(newClient.getId());
-            constructionService.createConstruction(c);
-        }
     }
 
     @Override
